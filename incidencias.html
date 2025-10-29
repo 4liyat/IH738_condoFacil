@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CondoFácil - Incidencias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    <span class="text-xl font-bold">CondoFácil</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="dashboard.html" class="hover:text-blue-200 font-medium">Dashboard</a>
+                    <a href="incidencias.html" class="text-white border-b-2 border-white font-medium">Incidencias</a>
+                    <a href="reservas.html" class="hover:text-blue-200 font-medium">Reservas</a>
+                    <button id="logoutBtn" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition font-medium">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Gestión de Incidencias</h1>
+                <p class="text-gray-600 mt-1">Reporta y da seguimiento a problemas del condominio</p>
+            </div>
+            <button id="newIncidenciaBtn" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition shadow-lg font-semibold flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Nueva Incidencia
+            </button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="bg-white rounded-lg shadow p-4 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                    <select id="filterEstado" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="">Todos</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="en_proceso">En Proceso</option>
+                        <option value="resuelta">Resuelta</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipo</label>
+                    <select id="filterTipo" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="">Todos</option>
+                        <option value="mantenimiento">Mantenimiento</option>
+                        <option value="limpieza">Limpieza</option>
+                        <option value="seguridad">Seguridad</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
+                    <select id="filterPrioridad" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option value="">Todas</option>
+                        <option value="baja">Baja</option>
+                        <option value="media">Media</option>
+                        <option value="alta">Alta</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button id="clearFilters" class="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition">
+                        Limpiar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Incidencias -->
+        <div id="incidenciasList" class="space-y-4">
+            <!-- Se llenará dinámicamente -->
+        </div>
+
+        <!-- Mensaje vacío -->
+        <div id="emptyState" class="hidden bg-white rounded-lg shadow p-12 text-center">
+            <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">No hay incidencias registradas</h3>
+            <p class="text-gray-500">Crea tu primera incidencia usando el botón "Nueva Incidencia"</p>
+        </div>
+    </div>
+
+    <!-- Modal Nueva/Editar Incidencia -->
+    <div id="incidenciaModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl">
+                <h2 id="modalTitle" class="text-2xl font-bold">Nueva Incidencia</h2>
+            </div>
+            <form id="incidenciaForm" class="p-6 space-y-4">
+                <input type="hidden" id="incidenciaId">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-700 font-medium mb-2">Título *</label>
+                        <input type="text" id="titulo" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-700 font-medium mb-2">Descripción *</label>
+                        <textarea id="descripcion" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Tipo *</label>
+                        <select id="tipo" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Seleccionar...</option>
+                            <option value="mantenimiento">Mantenimiento</option>
+                            <option value="limpieza">Limpieza</option>
+                            <option value="seguridad">Seguridad</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Prioridad *</label>
+                        <select id="prioridad" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Estado</label>
+                        <select id="estado" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en_proceso">En Proceso</option>
+                            <option value="resuelta">Resuelta</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Unidad</label>
+                        <input type="text" id="unidad" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-semibold">
+                        Guardar Incidencia
+                    </button>
+                    <button type="button" id="cancelBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticación
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+
+        let editingId = null;
+
+        // Cargar incidencias
+        function loadIncidencias() {
+            const incidencias = JSON.parse(localStorage.getItem('incidencias') || '[]');
+            const filterEstado = document.getElementById('filterEstado').value;
+            const filterTipo = document.getElementById('filterTipo').value;
+            const filterPrioridad = document.getElementById('filterPrioridad').value;
+
+            let filtered = incidencias.filter(i => {
+                return (!filterEstado || i.estado === filterEstado) &&
+                       (!filterTipo || i.tipo === filterTipo) &&
+                       (!filterPrioridad || i.prioridad === filterPrioridad);
+            });
+
+            const container = document.getElementById('incidenciasList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.innerHTML = filtered.map(inc => `
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                                <h3 class="text-xl font-bold text-gray-800">${inc.titulo}</h3>
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${getPrioridadColor(inc.prioridad)}">
+                                    ${inc.prioridad.toUpperCase()}
+                                </span>
+                            </div>
+                            <p class="text-gray-600 mb-3">${inc.descripcion}</p>
+                            <div class="flex flex-wrap gap-3 text-sm">
+                                <span class="flex items-center text-gray-600">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                    ${inc.tipo}
+                                </span>
+                                <span class="flex items-center text-gray-600">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Unidad: ${inc.unidad || 'N/A'}
+                                </span>
+                                <span class="flex items-center text-gray-600">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    ${new Date(inc.fechaCreacion).toLocaleDateString()}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2 ml-4">
+                            <span class="px-4 py-2 rounded-lg text-sm font-semibold ${getEstadoColor(inc.estado)} whitespace-nowrap">
+                                ${formatEstado(inc.estado)}
+                            </span>
+                            <button onclick="editIncidencia('${inc.id}')" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition text-sm font-semibold">
+                                Editar
+                            </button>
+                            <button onclick="deleteIncidencia('${inc.id}')" class="px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition text-sm font-semibold">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getPrioridadColor(prioridad) {
+            const colors = {
+                'baja': 'bg-green-100 text-green-800',
+                'media': 'bg-yellow-100 text-yellow-800',
+                'alta': 'bg-red-100 text-red-800'
+            };
+            return colors[prioridad] || 'bg-gray-100 text-gray-800';
+        }
+
+        function getEstadoColor(estado) {
+            const colors = {
+                'pendiente': 'bg-yellow-100 text-yellow-800',
+                'en_proceso': 'bg-blue-100 text-blue-800',
+                'resuelta': 'bg-green-100 text-green-800'
+            };
+            return colors[estado] || 'bg-gray-100 text-gray-800';
+        }
+
+        function formatEstado(estado) {
+            return estado === 'en_proceso' ? 'En Proceso' : estado.charAt(0).toUpperCase() + estado.slice(1);
+        }
+
+        // Abrir modal
+        document.getElementById('newIncidenciaBtn').addEventListener('click', () => {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = 'Nueva Incidencia';
+            document.getElementById('incidenciaForm').reset();
+            document.getElementById('unidad').value = currentUser.unidad || '';
+            document.getElementById('incidenciaModal').classList.remove('hidden');
+        });
+
+        // Cerrar modal
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            document.getElementById('incidenciaModal').classList.add('hidden');
+        });
+
+        // Guardar incidencia
+        document.getElementById('incidenciaForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const incidencias = JSON.parse(localStorage.getItem('incidencias') || '[]');
+            const incidencia = {
+                id: editingId || Date.now().toString(),
+                titulo: document.getElementById('titulo').value,
+                descripcion: document.getElementById('descripcion').value,
+                tipo: document.getElementById('tipo').value,
+                prioridad: document.getElementById('prioridad').value,
+                estado: document.getElementById('estado').value,
+                unidad: document.getElementById('unidad').value,
+                residenteId: currentUser.id,
+                residenteNombre: currentUser.nombre,
+                fechaCreacion: editingId ? incidencias.find(i => i.id === editingId).fechaCreacion : new Date().toISOString()
+            };
+
+            if (editingId) {
+                const index = incidencias.findIndex(i => i.id === editingId);
+                incidencias[index] = incidencia;
+            } else {
+                incidencias.push(incidencia);
+            }
+
+            localStorage.setItem('incidencias', JSON.stringify(incidencias));
+            document.getElementById('incidenciaModal').classList.add('hidden');
+            loadIncidencias();
+        });
+
+        // Editar incidencia
+        window.editIncidencia = (id) => {
+            const incidencias = JSON.parse(localStorage.getItem('incidencias') || '[]');
+            const incidencia = incidencias.find(i => i.id === id);
+            
+            if (incidencia) {
+                editingId = id;
+                document.getElementById('modalTitle').textContent = 'Editar Incidencia';
+                document.getElementById('titulo').value = incidencia.titulo;
+                document.getElementById('descripcion').value = incidencia.descripcion;
+                document.getElementById('tipo').value = incidencia.tipo;
+                document.getElementById('prioridad').value = incidencia.prioridad;
+                document.getElementById('estado').value = incidencia.estado;
+                document.getElementById('unidad').value = incidencia.unidad;
+                document.getElementById('incidenciaModal').classList.remove('hidden');
+            }
+        };
+
+        // Eliminar incidencia
+        window.deleteIncidencia = (id) => {
+            if (confirm('¿Estás seguro de eliminar esta incidencia?')) {
+                let incidencias = JSON.parse(localStorage.getItem('incidencias') || '[]');
+                incidencias = incidencias.filter(i => i.id !== id);
+                localStorage.setItem('incidencias', JSON.stringify(incidencias));
+                loadIncidencias();
+            }
+        };
+
+        // Filtros
+        document.getElementById('filterEstado').addEventListener('change', loadIncidencias);
+        document.getElementById('filterTipo').addEventListener('change', loadIncidencias);
+        document.getElementById('filterPrioridad').addEventListener('change', loadIncidencias);
+        
+        document.getElementById('clearFilters').addEventListener('click', () => {
+            document.getElementById('filterEstado').value = '';
+            document.getElementById('filterTipo').value = '';
+            document.getElementById('filterPrioridad').value = '';
+            loadIncidencias();
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('¿Cerrar sesión?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Inicializar
+        loadIncidencias();
+    </script>
+</body>
+</html>

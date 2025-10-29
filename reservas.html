@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CondoFácil - Reservas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    <span class="text-xl font-bold">CondoFácil</span>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <a href="dashboard.html" class="hover:text-blue-200 font-medium">Dashboard</a>
+                    <a href="incidencias.html" class="hover:text-blue-200 font-medium">Incidencias</a>
+                    <a href="reservas.html" class="text-white border-b-2 border-white font-medium">Reservas</a>
+                    <button id="logoutBtn" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition font-medium">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">Reservas de Áreas Comunes</h1>
+                <p class="text-gray-600 mt-1">Reserva espacios del condominio de forma fácil y rápida</p>
+            </div>
+            <button id="newReservaBtn" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition shadow-lg font-semibold flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Nueva Reserva
+            </button>
+        </div>
+
+        <!-- Áreas Disponibles -->
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow p-4 text-center hover:shadow-lg transition cursor-pointer" data-area="salon_eventos">
+                <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-800">Salón de Eventos</h3>
+                <p class="text-xs text-gray-600 mt-1">Cap. 100 personas</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-4 text-center hover:shadow-lg transition cursor-pointer" data-area="alberca">
+                <div class="bg-cyan-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-800">Alberca</h3>
+                <p class="text-xs text-gray-600 mt-1">8:00 AM - 8:00 PM</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-4 text-center hover:shadow-lg transition cursor-pointer" data-area="gym">
+                <div class="bg-red-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-800">Gimnasio</h3>
+                <p class="text-xs text-gray-600 mt-1">6:00 AM - 10:00 PM</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-4 text-center hover:shadow-lg transition cursor-pointer" data-area="cancha">
+                <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-800">Cancha Deportiva</h3>
+                <p class="text-xs text-gray-600 mt-1">Todo el día</p>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-4 text-center hover:shadow-lg transition cursor-pointer" data-area="terraza">
+                <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                </div>
+                <h3 class="font-semibold text-gray-800">Terraza</h3>
+                <p class="text-xs text-gray-600 mt-1">Eventos privados</p>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bg-white rounded-lg shadow mb-6">
+            <div class="border-b border-gray-200">
+                <div class="flex">
+                    <button id="tabMisReservas" class="px-6 py-3 font-semibold text-blue-600 border-b-2 border-blue-600">
+                        Mis Reservas
+                    </button>
+                    <button id="tabTodasReservas" class="px-6 py-3 font-semibold text-gray-600 hover:text-blue-600">
+                        Todas las Reservas
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Reservas -->
+        <div id="reservasList" class="space-y-4">
+            <!-- Se llenará dinámicamente -->
+        </div>
+
+        <!-- Mensaje vacío -->
+        <div id="emptyState" class="hidden bg-white rounded-lg shadow p-12 text-center">
+            <svg class="w-24 h-24 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            <h3 class="text-xl font-semibold text-gray-600 mb-2">No hay reservas</h3>
+            <p class="text-gray-500">Crea tu primera reserva usando el botón "Nueva Reserva"</p>
+        </div>
+    </div>
+
+    <!-- Modal Nueva Reserva -->
+    <div id="reservaModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl">
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-t-2xl">
+                <h2 class="text-2xl font-bold">Nueva Reserva</h2>
+            </div>
+            <form id="reservaForm" class="p-6 space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label class="block text-gray-700 font-medium mb-2">Área *</label>
+                        <select id="area" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option value="">Seleccionar...</option>
+                            <option value="salon_eventos">Salón de Eventos</option>
+                            <option value="alberca">Alberca</option>
+                            <option value="gym">Gimnasio</option>
+                            <option value="cancha">Cancha Deportiva</option>
+                            <option value="terraza">Terraza</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Fecha *</label>
+                        <input type="date" id="fecha" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Unidad *</label>
+                        <input type="text" id="unidad" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Hora Inicio *</label>
+                        <input type="time" id="horaInicio" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2">Hora Fin *</label>
+                        <input type="time" id="horaFin" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition font-semibold">
+                        Confirmar Reserva
+                    </button>
+                    <button type="button" id="cancelBtn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition font-semibold">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Verificar autenticación
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            window.location.href = 'index.html';
+        }
+
+        let showingMyReservas = true;
+
+        // Formatear nombre de área
+        function formatArea(area) {
+            const nombres = {
+                'salon_eventos': 'Salón de Eventos',
+                'alberca': 'Alberca',
+                'gym': 'Gimnasio',
+                'cancha': 'Cancha Deportiva',
+                'terraza': 'Terraza'
+            };
+            return nombres[area] || area;
+        }
+
+        // Cargar reservas
+        function loadReservas() {
+            const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
+            let filtered = showingMyReservas 
+                ? reservas.filter(r => r.residenteId === currentUser.id)
+                : reservas;
+
+            filtered = filtered.filter(r => r.estado === 'confirmada');
+
+            const container = document.getElementById('reservasList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            container.innerHTML = filtered.map(res => `
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-3">
+                                <div class="bg-blue-100 p-3 rounded-lg">
+                                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-gray-800">${formatArea(res.area)}</h3>
+                                    <p class="text-sm text-gray-600">Reservado por: ${res.residenteNombre}</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+                                <div class="flex items-center text-gray-600">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    ${new Date(res.fecha).toLocaleDateString()}
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    ${res.horaInicio} - ${res.horaFin}
+                                </div>
+                                <div class="flex items-center text-gray-600">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Unidad ${res.unidad}
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
+                                        Confirmada
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        ${res.residenteId === currentUser.id ? `
+                            <button onclick="cancelReserva('${res.id}')" class="ml-4 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition font-semibold">
+                                Cancelar
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Tabs
+        document.getElementById('tabMisReservas').addEventListener('click', function() {
+            showingMyReservas = true;
+            this.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            this.classList.remove('text-gray-600');
+            document.getElementById('tabTodasReservas').classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+            document.getElementById('tabTodasReservas').classList.add('text-gray-600');
+            loadReservas();
+        });
+
+        document.getElementById('tabTodasReservas').addEventListener('click', function() {
+            showingMyReservas = false;
+            this.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+            this.classList.remove('text-gray-600');
+            document.getElementById('tabMisReservas').classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+            document.getElementById('tabMisReservas').classList.add('text-gray-600');
+            loadReservas();
+        });
+
+        // Abrir modal
+        document.getElementById('newReservaBtn').addEventListener('click', () => {
+            document.getElementById('reservaForm').reset();
+            document.getElementById('unidad').value = currentUser.unidad || '';
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('fecha').min = today;
+            document.getElementById('reservaModal').classList.remove('hidden');
+        });
+
+        // Cerrar modal
+        document.getElementById('cancelBtn').addEventListener('click', () => {
+            document.getElementById('reservaModal').classList.add('hidden');
+        });
+
+        // Guardar reserva
+        document.getElementById('reservaForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const reserva = {
+                id: Date.now().toString(),
+                area: document.getElementById('area').value,
+                fecha: document.getElementById('fecha').value,
+                horaInicio: document.getElementById('horaInicio').value,
+                horaFin: document.getElementById('horaFin').value,
+                unidad: document.getElementById('unidad').value,
+                residenteId: currentUser.id,
+                residenteNombre: currentUser.nombre,
+                estado: 'confirmada',
+                createdAt: new Date().toISOString()
+            };
+
+            const reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
+            reservas.push(reserva);
+            localStorage.setItem('reservas', JSON.stringify(reservas));
+
+            document.getElementById('reservaModal').classList.add('hidden');
+            alert('¡Reserva confirmada exitosamente!');
+            loadReservas();
+        });
+
+        // Cancelar reserva
+        window.cancelReserva = (id) => {
+            if (confirm('¿Estás seguro de cancelar esta reserva?')) {
+                let reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
+                const index = reservas.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    reservas[index].estado = 'cancelada';
+                    localStorage.setItem('reservas', JSON.stringify(reservas));
+                    loadReservas();
+                }
+            }
+        };
+
+        // Click en áreas
+        document.querySelectorAll('[data-area]').forEach(card => {
+            card.addEventListener('click', function() {
+                document.getElementById('area').value = this.dataset.area;
+                document.getElementById('newReservaBtn').click();
+            });
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            if (confirm('¿Cerrar sesión?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Inicializar
+        loadReservas();
+    </script>
+</body>
+</html>
